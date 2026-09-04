@@ -1,0 +1,1287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Matrix Admin</title>
+
+    <meta
+        name="description"
+        content="Matrix Admin Control Panel"
+    >
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <div class="app-shell">
+
+        <!-- =====================================================
+             SIDEBAR
+        ====================================================== -->
+
+        <aside class="sidebar">
+
+            <div class="brand">
+                <div class="brand-logo">
+                    M
+                </div>
+
+                <div class="brand-text">
+                    <div class="brand-title">MATRIX</div>
+                    <div class="brand-subtitle">ADMIN PANEL</div>
+                </div>
+            </div>
+
+
+            <nav class="sidebar-nav">
+
+                <div class="nav-section-title">
+                    MAIN
+                </div>
+
+                <button
+                    class="nav-item active"
+                    data-page="home"
+                >
+                    <span class="nav-icon">⌂</span>
+                    <span>Dashboard</span>
+                </button>
+
+
+                <div class="nav-section-title">
+                    MANAGEMENT
+                </div>
+
+                <button
+                    class="nav-item"
+                    data-page="result"
+                >
+                    <span class="nav-icon">◫</span>
+                    <span>Add Result</span>
+                </button>
+
+                <button
+                    class="nav-item"
+                    data-page="notification"
+                >
+                    <span class="nav-icon">♢</span>
+                    <span>Add Notification</span>
+                </button>
+
+            </nav>
+
+
+            <div class="sidebar-footer">
+
+                <div class="admin-card">
+
+                    <div class="admin-avatar">
+                        A
+                    </div>
+
+                    <div class="admin-info">
+                        <strong>Administrator</strong>
+                        <span>Matrix Admin</span>
+                    </div>
+
+                    <button
+                        class="logout-button"
+                        title="Logout"
+                    >
+                        ↪
+                    </button>
+
+                </div>
+
+            </div>
+
+        </aside>
+
+
+        <!-- =====================================================
+             MAIN AREA
+        ====================================================== -->
+
+        <main class="main-area">
+
+            <!-- HEADER -->
+
+            <header class="topbar">
+
+                <div>
+                    <h1 id="page-title">Dashboard</h1>
+
+                    <p id="page-subtitle">
+                        Matrix administration and control center
+                    </p>
+                </div>
+
+
+                <div class="topbar-right">
+
+                    <div class="status-pill">
+                        <span class="status-dot"></span>
+                        Firebase Connected
+                    </div>
+
+                    <div class="topbar-avatar">
+                        A
+                    </div>
+
+                </div>
+
+            </header>
+
+
+            <!-- =================================================
+                 HOME PAGE
+            ================================================== -->
+
+            <section
+                class="page active"
+                id="page-home"
+            >
+
+                <div class="welcome-card">
+
+                    <div class="welcome-content">
+
+                        <span class="eyebrow">
+                            MATRIX ADMIN
+                        </span>
+
+                        <h2>
+                            Welcome back, Admin 👋
+                        </h2>
+
+                        <p>
+                            Manage Matrix student data, results,
+                            notifications and academic information
+                            from one place.
+                        </p>
+
+                    </div>
+
+                    <div class="welcome-decoration">
+                        M
+                    </div>
+
+                </div>
+
+
+                <!-- STAT CARDS -->
+
+                <div class="section-heading">
+
+                    <div>
+                        <h3>Overview</h3>
+
+                        <p>
+                            Current Matrix system statistics
+                        </p>
+                    </div>
+
+                </div>
+
+
+                <div class="stats-grid">
+
+                    <div class="stat-card">
+
+                        <div class="stat-icon students-icon">
+                            S
+                        </div>
+
+                        <div class="stat-content">
+
+                            <span class="stat-label">
+                                Students
+                            </span>
+
+                            <strong class="stat-value">
+                                1
+                            </strong>
+
+                            <span class="stat-description">
+                                Registered student
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="stat-card">
+
+                        <div class="stat-icon tests-icon">
+                            T
+                        </div>
+
+                        <div class="stat-content">
+
+                            <span class="stat-label">
+                                Tests
+                            </span>
+
+                            <strong class="stat-value">
+                                4
+                            </strong>
+
+                            <span class="stat-description">
+                                Test records
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="stat-card">
+
+                        <div class="stat-icon notification-icon">
+                            N
+                        </div>
+
+                        <div class="stat-content">
+
+                            <span class="stat-label">
+                                Notifications
+                            </span>
+
+                            <strong class="stat-value">
+                                7
+                            </strong>
+
+                            <span class="stat-description">
+                                Total notifications
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="stat-card">
+
+                        <div class="stat-icon result-icon">
+                            R
+                        </div>
+
+                        <div class="stat-content">
+
+                            <span class="stat-label">
+                                Results
+                            </span>
+
+                            <strong class="stat-value">
+                                4
+                            </strong>
+
+                            <span class="stat-description">
+                                Published results
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- QUICK ACTIONS -->
+
+                <div class="section-heading">
+
+                    <div>
+                        <h3>Quick Actions</h3>
+
+                        <p>
+                            Frequently used administrator tools
+                        </p>
+                    </div>
+
+                </div>
+
+
+                <div class="quick-actions">
+
+                    <button
+                        class="quick-action"
+                        data-page="result"
+                    >
+
+                        <div class="quick-action-icon">
+                            +
+                        </div>
+
+                        <div>
+
+                            <strong>
+                                Add Result
+                            </strong>
+
+                            <span>
+                                Create a new test result
+                            </span>
+
+                        </div>
+
+                        <span class="action-arrow">
+                            →
+                        </span>
+
+                    </button>
+
+
+                    <button
+                        class="quick-action"
+                        data-page="notification"
+                    >
+
+                        <div class="quick-action-icon notification-action">
+                            +
+                        </div>
+
+                        <div>
+
+                            <strong>
+                                Add Notification
+                            </strong>
+
+                            <span>
+                                Send an announcement to students
+                            </span>
+
+                        </div>
+
+                        <span class="action-arrow">
+                            →
+                        </span>
+
+                    </button>
+
+                </div>
+
+
+                <!-- RECENT ACTIVITY -->
+
+                <div class="section-heading recent-heading">
+
+                    <div>
+                        <h3>Recent Activity</h3>
+
+                        <p>
+                            Latest changes in the system
+                        </p>
+                    </div>
+
+                </div>
+
+
+                <div class="activity-card">
+
+                    <div class="activity-row">
+
+                        <div class="activity-icon">
+                            ✓
+                        </div>
+
+                        <div class="activity-content">
+
+                            <strong>
+                                New Test Result
+                            </strong>
+
+                            <span>
+                                Test result information available
+                            </span>
+
+                        </div>
+
+                        <span class="activity-time">
+                            Recently
+                        </span>
+
+                    </div>
+
+
+                    <div class="activity-divider"></div>
+
+
+                    <div class="activity-row">
+
+                        <div class="activity-icon">
+                            !
+                        </div>
+
+                        <div class="activity-content">
+
+                            <strong>
+                                Notification System
+                            </strong>
+
+                            <span>
+                                Notification records available
+                            </span>
+
+                        </div>
+
+                        <span class="activity-time">
+                            Recently
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- =================================================
+                 ADD RESULT PAGE
+            ================================================== -->
+
+            <section
+                class="page"
+                id="page-result"
+            >
+
+                <div class="page-intro">
+
+                    <span class="eyebrow">
+                        RESULT MANAGEMENT
+                    </span>
+
+                    <h2>
+                        Add Test Result
+                    </h2>
+
+                    <p>
+                        Create a complete test result record
+                        for the Matrix student system.
+                    </p>
+
+                </div>
+
+
+                <!-- TEST INFORMATION -->
+
+                <div class="form-card">
+
+                    <div class="form-card-header">
+
+                        <div>
+                            <h3>Test Information</h3>
+
+                            <p>
+                                Basic information about the test
+                            </p>
+                        </div>
+
+                        <span class="form-step">
+                            01
+                        </span>
+
+                    </div>
+
+
+                    <div class="form-grid">
+
+                        <div class="form-group full-width">
+
+                            <label for="test-title">
+                                Test Title
+                            </label>
+
+                            <input
+                                id="test-title"
+                                type="text"
+                                placeholder="Enter test title"
+                            >
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label for="start-date">
+                                Start Date
+                            </label>
+
+                            <input
+                                id="start-date"
+                                type="date"
+                            >
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label for="start-time">
+                                Start Time
+                            </label>
+
+                            <input
+                                id="start-time"
+                                type="time"
+                            >
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label for="end-date">
+                                End Date
+                            </label>
+
+                            <input
+                                id="end-date"
+                                type="date"
+                            >
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label for="end-time">
+                                End Time
+                            </label>
+
+                            <input
+                                id="end-time"
+                                type="time"
+                            >
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label for="result-date">
+                                Result Date
+                            </label>
+
+                            <input
+                                id="result-date"
+                                type="date"
+                            >
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- FIXED INFORMATION -->
+
+                <div class="form-card">
+
+                    <div class="form-card-header">
+
+                        <div>
+                            <h3>Test Settings</h3>
+
+                            <p>
+                                These values are fixed for the current Matrix setup
+                            </p>
+                        </div>
+
+                        <span class="form-step">
+                            02
+                        </span>
+
+                    </div>
+
+
+                    <div class="fixed-grid">
+
+                        <div class="fixed-item">
+
+                            <span>
+                                Duration
+                            </span>
+
+                            <strong>
+                                180 Mins
+                            </strong>
+
+                        </div>
+
+
+                        <div class="fixed-item">
+
+                            <span>
+                                Mode
+                            </span>
+
+                            <strong>
+                                Online + Offline
+                            </strong>
+
+                        </div>
+
+
+                        <div class="fixed-item">
+
+                            <span>
+                                Total Students
+                            </span>
+
+                            <strong>
+                                1825
+                            </strong>
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label for="status">
+                                Status
+                            </label>
+
+                            <select id="status">
+
+                                <option value="past">
+                                    Past
+                                </option>
+
+                            </select>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- OVERALL RESULT -->
+
+                <div class="form-card">
+
+                    <div class="form-card-header">
+
+                        <div>
+                            <h3>Overall Result</h3>
+
+                            <p>
+                                Enter the main performance statistics
+                            </p>
+                        </div>
+
+                        <span class="form-step">
+                            03
+                        </span>
+
+                    </div>
+
+
+                    <div class="form-grid">
+
+                        <div class="form-group">
+
+                            <label for="rank">
+                                Rank
+                            </label>
+
+                            <input
+                                id="rank"
+                                type="number"
+                                min="1"
+                                placeholder="e.g. 3"
+                            >
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label for="total-score">
+                                Total Score
+                            </label>
+
+                            <input
+                                id="total-score"
+                                type="number"
+                                placeholder="e.g. 156"
+                            >
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label for="attempted">
+                                Attempted Questions
+                            </label>
+
+                            <input
+                                id="attempted"
+                                type="number"
+                                placeholder="e.g. 48"
+                            >
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label for="incorrect">
+                                Incorrect Questions
+                            </label>
+
+                            <input
+                                id="incorrect"
+                                type="number"
+                                placeholder="e.g. 3"
+                            >
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label for="highest-marks">
+                                Highest Marks
+                            </label>
+
+                            <input
+                                id="highest-marks"
+                                type="number"
+                                placeholder="e.g. 163"
+                            >
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label for="topper-attempted">
+                                Topper Attempted Questions
+                            </label>
+
+                            <input
+                                id="topper-attempted"
+                                type="number"
+                                placeholder="e.g. 51"
+                            >
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- SUBJECT RESULTS -->
+
+                <div class="form-card">
+
+                    <div class="form-card-header">
+
+                        <div>
+                            <h3>Subject Results</h3>
+
+                            <p>
+                                Enter subject-wise performance data
+                            </p>
+                        </div>
+
+                        <span class="form-step">
+                            04
+                        </span>
+
+                    </div>
+
+
+                    <!-- MATHEMATICS -->
+
+                    <div class="subject-section">
+
+                        <div class="subject-title">
+                            <span class="subject-marker maths-marker"></span>
+                            Mathematics
+                        </div>
+
+
+                        <div class="form-grid four-columns">
+
+                            <div class="form-group">
+
+                                <label for="maths-marks">
+                                    Marks
+                                </label>
+
+                                <input
+                                    id="maths-marks"
+                                    type="number"
+                                    placeholder="68"
+                                >
+
+                            </div>
+
+
+                            <div class="form-group">
+
+                                <label for="maths-highest">
+                                    Highest Marks
+                                </label>
+
+                                <input
+                                    id="maths-highest"
+                                    type="number"
+                                    placeholder="68"
+                                >
+
+                            </div>
+
+
+                            <div class="form-group">
+
+                                <label for="maths-average">
+                                    Average
+                                </label>
+
+                                <input
+                                    id="maths-average"
+                                    type="number"
+                                    placeholder="7"
+                                >
+
+                            </div>
+
+
+                            <div class="form-group">
+
+                                <label for="maths-top25">
+                                    Top 25 Average
+                                </label>
+
+                                <input
+                                    id="maths-top25"
+                                    type="number"
+                                    placeholder="11"
+                                >
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- PHYSICS -->
+
+                    <div class="subject-section">
+
+                        <div class="subject-title">
+                            <span class="subject-marker physics-marker"></span>
+                            Physics
+                        </div>
+
+
+                        <div class="form-grid four-columns">
+
+                            <div class="form-group">
+
+                                <label for="physics-marks">
+                                    Marks
+                                </label>
+
+                                <input
+                                    id="physics-marks"
+                                    type="number"
+                                    placeholder="66"
+                                >
+
+                            </div>
+
+
+                            <div class="form-group">
+
+                                <label for="physics-highest">
+                                    Highest Marks
+                                </label>
+
+                                <input
+                                    id="physics-highest"
+                                    type="number"
+                                    placeholder="66"
+                                >
+
+                            </div>
+
+
+                            <div class="form-group">
+
+                                <label for="physics-average">
+                                    Average
+                                </label>
+
+                                <input
+                                    id="physics-average"
+                                    type="number"
+                                    placeholder="28"
+                                >
+
+                            </div>
+
+
+                            <div class="form-group">
+
+                                <label for="physics-top25">
+                                    Top 25 Average
+                                </label>
+
+                                <input
+                                    id="physics-top25"
+                                    type="number"
+                                    placeholder="41"
+                                >
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- CHEMISTRY -->
+
+                    <div class="subject-section">
+
+                        <div class="subject-title">
+                            <span class="subject-marker chemistry-marker"></span>
+                            Chemistry
+                        </div>
+
+
+                        <div class="form-grid four-columns">
+
+                            <div class="form-group">
+
+                                <label for="chemistry-marks">
+                                    Marks
+                                </label>
+
+                                <input
+                                    id="chemistry-marks"
+                                    type="number"
+                                    placeholder="22"
+                                >
+
+                            </div>
+
+
+                            <div class="form-group">
+
+                                <label for="chemistry-highest">
+                                    Highest Marks
+                                </label>
+
+                                <input
+                                    id="chemistry-highest"
+                                    type="number"
+                                    placeholder="56"
+                                >
+
+                            </div>
+
+
+                            <div class="form-group">
+
+                                <label for="chemistry-average">
+                                    Average
+                                </label>
+
+                                <input
+                                    id="chemistry-average"
+                                    type="number"
+                                    placeholder="32"
+                                >
+
+                            </div>
+
+
+                            <div class="form-group">
+
+                                <label for="chemistry-top25">
+                                    Top 25 Average
+                                </label>
+
+                                <input
+                                    id="chemistry-top25"
+                                    type="number"
+                                    placeholder="50"
+                                >
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- SAVE -->
+
+                    <div class="form-actions">
+
+                        <button
+                            type="button"
+                            class="secondary-button"
+                            id="clear-result"
+                        >
+                            Clear
+                        </button>
+
+                        <button
+                            type="button"
+                            class="primary-button"
+                            id="save-result"
+                        >
+                            Save Result
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- =================================================
+                 ADD NOTIFICATION PAGE
+            ================================================== -->
+
+            <section
+                class="page"
+                id="page-notification"
+            >
+
+                <div class="page-intro">
+
+                    <span class="eyebrow">
+                        COMMUNICATION
+                    </span>
+
+                    <h2>
+                        Add Notification
+                    </h2>
+
+                    <p>
+                        Publish a notification that will appear
+                        inside the Matrix student app.
+                    </p>
+
+                </div>
+
+
+                <div class="form-card notification-form-card">
+
+                    <div class="form-card-header">
+
+                        <div>
+                            <h3>Notification Information</h3>
+
+                            <p>
+                                Create and publish a new notification
+                            </p>
+                        </div>
+
+                        <span class="form-step">
+                            01
+                        </span>
+
+                    </div>
+
+
+                    <div class="form-grid">
+
+                        <div class="form-group full-width">
+
+                            <label for="notification-title">
+                                Notification Title
+                            </label>
+
+                            <input
+                                id="notification-title"
+                                type="text"
+                                placeholder="e.g. New Test Scheduled"
+                            >
+
+                        </div>
+
+
+                        <div class="form-group full-width">
+
+                            <label for="notification-message">
+                                Message
+                            </label>
+
+                            <textarea
+                                id="notification-message"
+                                rows="5"
+                                placeholder="Write the notification message..."
+                            ></textarea>
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label for="notification-type">
+                                Type
+                            </label>
+
+                            <select id="notification-type">
+
+                                <option value="test">
+                                    Test
+                                </option>
+
+                                <option value="attendance">
+                                    Attendance
+                                </option>
+
+                                <option value="study_material">
+                                    Study Material
+                                </option>
+
+                                <option value="timetable">
+                                    Timetable
+                                </option>
+
+                                <option value="announcement">
+                                    Announcement
+                                </option>
+
+                                <option value="disciplinary">
+                                    Disciplinary Remark
+                                </option>
+
+                            </select>
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label for="notification-date">
+                                Date
+                            </label>
+
+                            <input
+                                id="notification-date"
+                                type="date"
+                            >
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label for="notification-time">
+                                Time
+                            </label>
+
+                            <input
+                                id="notification-time"
+                                type="time"
+                            >
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="notification-preview">
+
+                        <div class="preview-label">
+                            PREVIEW
+                        </div>
+
+                        <div class="notification-preview-card">
+
+                            <div class="preview-icon">
+                                !
+                            </div>
+
+                            <div>
+
+                                <strong id="preview-title">
+                                    Notification title
+                                </strong>
+
+                                <p id="preview-message">
+                                    Your notification preview will appear here.
+                                </p>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="form-actions">
+
+                        <button
+                            type="button"
+                            class="secondary-button"
+                            id="clear-notification"
+                        >
+                            Clear
+                        </button>
+
+                        <button
+                            type="button"
+                            class="primary-button"
+                            id="publish-notification"
+                        >
+                            Publish Notification
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+        </main>
+
+    </div>
+
+
+    <!-- =========================================================
+         TOAST
+    ========================================================== -->
+
+    <div
+        class="toast"
+        id="toast"
+    >
+        <div class="toast-icon">✓</div>
+
+        <div>
+            <strong id="toast-title">
+                Success
+            </strong>
+
+            <span id="toast-message">
+                Operation completed successfully.
+            </span>
+        </div>
+    </div>
+
+
+    <script src="app.js"></script>
+
+</body>
+</html>
