@@ -1,3 +1,14 @@
+import {
+    db,
+    auth
+} from "./firebase-config.js";
+
+import {
+    collection,
+    getDocs
+} from "https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
+
+
 /* =========================================================
    PAGE NAVIGATION
 ========================================================= */
@@ -397,6 +408,36 @@ publishNotificationButton.addEventListener(
     }
 );
 
+async function testFirebaseConnection() {
+
+    try {
+
+        const snapshot = await getDocs(
+            collection(db, "notifications")
+        );
+
+        console.log(
+            "✅ Firebase connected successfully."
+        );
+
+        console.log(
+            "Notifications found:",
+            snapshot.size
+        );
+
+    } catch (error) {
+
+        console.error(
+            "❌ Firebase connection failed:",
+            error
+        );
+
+    }
+
+}
+
+
+testFirebaseConnection();
 
 /* =========================================================
    DEFAULT STATE
