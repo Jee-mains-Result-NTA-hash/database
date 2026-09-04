@@ -8,35 +8,451 @@ import {
     getDocs
 } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
 
+import {
+    signInWithEmailAndPassword,
+    onAuthStateChanged,
+    signOut
+} from "https://www.gstatic.com/firebasejs/12.18.0/firebase-auth.js";
+
+
+/* =========================================================
+   FIREBASE / ADMIN AUTHENTICATION
+========================================================= */
+
+const ADMIN_EMAIL = "admin@matrixedu.in";
+
+const authScreen =
+    document.getElementById("auth-screen");
+
+const appShell =
+    document.querySelector(".app-shell");
+
+const loginForm =
+    document.getElementById("login-form");
+
+const loginEmail =
+    document.getElementById("login-email");
+
+const loginPassword =
+    document.getElementById("login-password");
+
+const loginButton =
+    document.getElementById("login-button");
+
+const loginError =
+    document.getElementById("login-error");
+
+
+/*
+ * Keep the actual admin dashboard hidden until
+ * Firebase confirms that a valid admin is signed in.
+ */
+if (appShell) {
+    appShell.style.display = "none";
+}
+
+
+/* ---------------------------------------------------------
+   LOGIN ERROR
+--------------------------------------------------------- */
+
+function showLoginError(message) {
+
+    if (!loginError) {
+        return;
+    }
+
+    loginError.textContent = message;
+    loginError.classList.add("show");
+}
+
+
+function hideLoginError() {
+
+    if (!loginError) {
+        return;
+    }
+
+    loginError.textContent = "";
+    loginError.classList.remove("show");
+}
+
+
+/* ---------------------------------------------------------
+   SHOW / HIDE APP
+--------------------------------------------------------- */
+
+function showAdminApp() {
+
+    if (authScreen) {
+        authScreen.classList.add("hidden");
+    }
+
+    if (appShell) {
+        appShell.style.display = "flex";
+    }
+}
+
+
+function showLoginScreen() {
+
+    if (authScreen) {
+        authScreen.classList.remove("hidden");
+    }
+
+    if (appShell) {
+        appShell.style.display = "none";
+    }
+}
+
+
+/* ---------------------------------------------------------
+   LOGIN
+--------------------------------------------------------- */
+
+if (loginForm) {
+
+    loginForm.addEventListener(
+        "submit",
+        async (event) => {
+
+            event.preventDefault();
+
+            hideLoginError();
+
+
+            const email =
+                loginEmail.value.trim().toLowerCase();
+
+            const password =
+                loginPassword.value;
+
+
+            if (!email || !password) {
+
+                showLoginError(
+                    "Please enter your email and password."
+                );
+
+                return;
+            }
+
+
+            loginButton.disabled = true;
+            loginButton.textContent = "Signing in...";
+
+
+            try {
+
+                /*
+                 * Firebase Authentication
+                 */
+                const credential =
+                    await signInWithEmailAndPassword(
+                        auth,
+                        email,
+                        password
+                    );
+
+
+                const user =
+                    credential.user;
+
+
+                /*
+                 * Admin email check
+                 */
+                if (
+                    !user.email ||
+                    user.email.toLowerCase() !==
+                    ADMIN_EMAIL.toLowerCase()
+                ) {
+
+                    await signOut(auth);
+
+                    showLoginError(
+                        "This account does not have Admin access."
+                    );
+
+                    return;
+                }
+
+
+                console.log(
+                    "✅ Admin authenticated:",
+                    user.email
+                );
+
+
+                showAdminApp();
+
+
+                /*
+                 * Test Firestore after successful authentication.
+                 */
+                await testFirebaseConnection();
+
+            } catch (error) {
+
+                console.error(
+                    "Firebase login error:",
+                    error
+                );
+
+
+                let message =
+                    "Unable to sign in. Please check your credentials.";
+
+
+                switch (error.code) {
+
+                    case "auth/invalid-credential":
+                        message =
+                            "Incorrect email or password.";
+                        break;
+
+
+                    case "auth/invalid-email":
+                        message =
+                            "Please enter a valid email address.";
+                        break;
+
+
+                    case "auth/user-not-found":
+                        message =
+                            "No account exists with this email.";
+                        break;
+
+
+                    case "auth/wrong-password":
+                        message =
+                            "Incorrect password.";
+                        break;
+
+
+                    case "auth/too-many-requests":
+                        message =
+                            "Too many login attempts. Please try again later.";
+                        break;
+
+
+                    case "auth/network-request-failed":
+                        message =
+                            "Network error. Please check your internet connection.";
+                        break;
+
+
+                    case "auth/user-disabled":
+                        message =
+                            "This account has been disabled.";
+                        break;
+
+                }
+
+
+                showLoginError(message);
+
+            } finally {
+
+                loginButton.disabled = false;
+                loginButton.textContent = "Sign In";
+
+            }
+
+        }
+    );
+
+}
+
+
+/* ---------------------------------------------------------
+   AUTH STATE
+--------------------------------------------------------- */
+
+onAuthStateChanged(
+    auth,
+    async (user) => {
+
+        if (!user) {
+
+            showLoginScreen();
+
+            return;
+        }
+
+
+        /*
+         * Only the designated admin email is allowed
+         * to remain signed in to this dashboard.
+         */
+        if (
+            !user.email ||
+            user.email.toLowerCase() !==
+            ADMIN_EMAIL.toLowerCase()
+        ) {
+
+            try {
+
+                await signOut(auth);
+
+            } catch (error) {
+
+                console.error(
+                    "Failed to sign out unauthorized user:",
+                    error
+                );
+
+            }
+
+
+            showLoginScreen();
+
+            showLoginError(
+                "This account does not have Admin access."
+            );
+
+            return;
+        }
+
+
+        console.log(
+            "✅ Existing admin session:",
+            user.email
+        );
+
+
+        showAdminApp();
+
+
+        /*
+         * Verify Firestore access now that authentication
+         * has been confirmed.
+         */
+        await testFirebaseConnection();
+
+    }
+);
+
+
+/* ---------------------------------------------------------
+   FIRESTORE CONNECTION TEST
+--------------------------------------------------------- */
+
+async function testFirebaseConnection() {
+
+    try {
+
+        const snapshot =
+            await getDocs(
+                collection(
+                    db,
+                    "notifications"
+                )
+            );
+
+
+        console.log(
+            "✅ Firestore connected successfully."
+        );
+
+
+        console.log(
+            "Notifications found:",
+            snapshot.size
+        );
+
+
+    } catch (error) {
+
+        console.error(
+            "❌ Firestore connection failed:",
+            error
+        );
+
+    }
+
+}
+
+
+/* ---------------------------------------------------------
+   LOGOUT
+--------------------------------------------------------- */
+
+const logoutButton =
+    document.querySelector(".logout-button");
+
+
+if (logoutButton) {
+
+    logoutButton.addEventListener(
+        "click",
+        async () => {
+
+            try {
+
+                await signOut(auth);
+
+                console.log(
+                    "✅ Admin signed out."
+                );
+
+            } catch (error) {
+
+                console.error(
+                    "Logout failed:",
+                    error
+                );
+
+            }
+
+        }
+    );
+
+}
+
 
 /* =========================================================
    PAGE NAVIGATION
 ========================================================= */
 
 const pages = {
+
     home: {
         title: "Dashboard",
-        subtitle: "Matrix administration and control center"
+        subtitle:
+            "Matrix administration and control center"
     },
 
     result: {
         title: "Add Result",
-        subtitle: "Create and manage test result records"
+        subtitle:
+            "Create and manage test result records"
     },
 
     notification: {
         title: "Add Notification",
-        subtitle: "Publish notifications to Matrix students"
+        subtitle:
+            "Publish notifications to Matrix students"
     }
+
 };
 
 
-const navItems = document.querySelectorAll(".nav-item");
-const quickActions = document.querySelectorAll(".quick-action");
-const pagesElements = document.querySelectorAll(".page");
+const navItems =
+    document.querySelectorAll(".nav-item");
 
-const pageTitle = document.getElementById("page-title");
-const pageSubtitle = document.getElementById("page-subtitle");
+const quickActions =
+    document.querySelectorAll(".quick-action");
+
+const pagesElements =
+    document.querySelectorAll(".page");
+
+
+const pageTitle =
+    document.getElementById("page-title");
+
+const pageSubtitle =
+    document.getElementById("page-subtitle");
 
 
 function openPage(pageName) {
@@ -46,69 +462,125 @@ function openPage(pageName) {
     }
 
 
-    pagesElements.forEach((page) => {
-        page.classList.remove("active");
-    });
+    /*
+     * Hide all pages
+     */
+    pagesElements.forEach(
+        (page) => {
+            page.classList.remove("active");
+        }
+    );
 
 
+    /*
+     * Show requested page
+     */
     const targetPage =
-        document.getElementById(`page-${pageName}`);
+        document.getElementById(
+            `page-${pageName}`
+        );
 
 
     if (targetPage) {
+
         targetPage.classList.add("active");
+
     }
 
 
-    navItems.forEach((item) => {
+    /*
+     * Update sidebar active state
+     */
+    navItems.forEach(
+        (item) => {
 
-        item.classList.remove("active");
+            item.classList.remove("active");
 
-        if (item.dataset.page === pageName) {
-            item.classList.add("active");
+
+            if (
+                item.dataset.page === pageName
+            ) {
+
+                item.classList.add("active");
+
+            }
+
         }
-
-    });
-
-
-    pageTitle.textContent =
-        pages[pageName].title;
-
-    pageSubtitle.textContent =
-        pages[pageName].subtitle;
+    );
 
 
+    /*
+     * Update topbar
+     */
+    if (pageTitle) {
+
+        pageTitle.textContent =
+            pages[pageName].title;
+
+    }
+
+
+    if (pageSubtitle) {
+
+        pageSubtitle.textContent =
+            pages[pageName].subtitle;
+
+    }
+
+
+    /*
+     * Scroll to top
+     */
     window.scrollTo({
         top: 0,
         behavior: "smooth"
     });
+
 }
 
 
-/* SIDEBAR NAVIGATION */
+/* ---------------------------------------------------------
+   SIDEBAR NAVIGATION
+--------------------------------------------------------- */
 
-navItems.forEach((item) => {
+navItems.forEach(
+    (item) => {
 
-    item.addEventListener("click", () => {
+        item.addEventListener(
+            "click",
+            () => {
 
-        openPage(item.dataset.page);
+                openPage(
+                    item.dataset.page
+                );
 
-    });
+            }
+        );
 
-});
+    }
+);
 
 
-/* QUICK ACTIONS */
+/* ---------------------------------------------------------
+   QUICK ACTIONS
+--------------------------------------------------------- */
 
-quickActions.forEach((button) => {
+quickActions.forEach(
+    (button) => {
 
-    button.addEventListener("click", () => {
+        button.addEventListener(
+            "click",
+            () => {
 
-        openPage(button.dataset.page);
+                openPage(
+                    button.dataset.page
+                );
 
-    });
+            }
+        );
 
-});
+    }
+);
 
 
 /* =========================================================
@@ -130,22 +602,40 @@ let toastTimer;
 
 function showToast(title, message) {
 
+    if (
+        !toast ||
+        !toastTitle ||
+        !toastMessage
+    ) {
+        return;
+    }
+
+
     clearTimeout(toastTimer);
 
 
-    toastTitle.textContent = title;
+    toastTitle.textContent =
+        title;
 
-    toastMessage.textContent = message;
+    toastMessage.textContent =
+        message;
 
 
     toast.classList.add("show");
 
 
-    toastTimer = setTimeout(() => {
+    toastTimer =
+        setTimeout(
+            () => {
 
-        toast.classList.remove("show");
+                toast.classList.remove(
+                    "show"
+                );
 
-    }, 3000);
+            },
+            3000
+        );
+
 }
 
 
@@ -156,7 +646,6 @@ function showToast(title, message) {
 const saveResultButton =
     document.getElementById("save-result");
 
-
 const clearResultButton =
     document.getElementById("clear-result");
 
@@ -164,7 +653,14 @@ const clearResultButton =
 function clearResultForm() {
 
     const resultSection =
-        document.getElementById("page-result");
+        document.getElementById(
+            "page-result"
+        );
+
+
+    if (!resultSection) {
+        return;
+    }
 
 
     const inputs =
@@ -173,11 +669,13 @@ function clearResultForm() {
         );
 
 
-    inputs.forEach((input) => {
+    inputs.forEach(
+        (input) => {
 
-        input.value = "";
+            input.value = "";
 
-    });
+        }
+    );
 
 
     const selects =
@@ -186,67 +684,89 @@ function clearResultForm() {
         );
 
 
-    selects.forEach((select) => {
+    selects.forEach(
+        (select) => {
 
-        select.selectedIndex = 0;
+            select.selectedIndex = 0;
 
-    });
+        }
+    );
 
 }
 
 
-clearResultButton.addEventListener(
-    "click",
-    () => {
+if (clearResultButton) {
 
-        clearResultForm();
+    clearResultButton.addEventListener(
+        "click",
+        () => {
 
-        showToast(
-            "Form Cleared",
-            "All result fields have been cleared."
-        );
+            clearResultForm();
 
-    }
-);
-
-
-saveResultButton.addEventListener(
-    "click",
-    () => {
-
-        const title =
-            document.getElementById(
-                "test-title"
-            ).value.trim();
-
-
-        if (!title) {
 
             showToast(
-                "Missing Information",
-                "Please enter a test title first."
+                "Form Cleared",
+                "All result fields have been cleared."
             );
 
-            document.getElementById(
-                "test-title"
-            ).focus();
-
-            return;
         }
+    );
+
+}
 
 
-        /*
-         * Firebase Firestore integration will be
-         * added here in the next stage.
-         */
+if (saveResultButton) {
 
-        showToast(
-            "Ready to Save",
-            "Result form is valid. Firebase saving will be connected next."
-        );
+    saveResultButton.addEventListener(
+        "click",
+        () => {
 
-    }
-);
+            const titleInput =
+                document.getElementById(
+                    "test-title"
+                );
+
+
+            const title =
+                titleInput
+                    ? titleInput.value.trim()
+                    : "";
+
+
+            if (!title) {
+
+                showToast(
+                    "Missing Information",
+                    "Please enter a test title first."
+                );
+
+
+                if (titleInput) {
+
+                    titleInput.focus();
+
+                }
+
+
+                return;
+            }
+
+
+            /*
+             * Firebase Firestore result creation
+             * will be connected here next.
+             */
+
+
+            showToast(
+                "Ready to Save",
+                "Result form is valid. Firebase saving will be connected next."
+            );
+
+        }
+    );
+
+}
 
 
 /* =========================================================
@@ -279,6 +799,16 @@ const previewMessage =
 
 function updateNotificationPreview() {
 
+    if (
+        !notificationTitleInput ||
+        !notificationMessageInput ||
+        !previewTitle ||
+        !previewMessage
+    ) {
+        return;
+    }
+
+
     const title =
         notificationTitleInput.value.trim();
 
@@ -288,7 +818,8 @@ function updateNotificationPreview() {
 
 
     previewTitle.textContent =
-        title || "Notification title";
+        title ||
+        "Notification title";
 
 
     previewMessage.textContent =
@@ -298,16 +829,25 @@ function updateNotificationPreview() {
 }
 
 
-notificationTitleInput.addEventListener(
-    "input",
-    updateNotificationPreview
-);
+if (notificationTitleInput) {
+
+    notificationTitleInput.addEventListener(
+        "input",
+        updateNotificationPreview
+    );
+
+}
 
 
-notificationMessageInput.addEventListener(
-    "input",
-    updateNotificationPreview
-);
+if (notificationMessageInput) {
+
+    notificationMessageInput.addEventListener(
+        "input",
+        updateNotificationPreview
+    );
+
+
+}
 
 
 const clearNotificationButton =
@@ -316,40 +856,72 @@ const clearNotificationButton =
     );
 
 
-clearNotificationButton.addEventListener(
-    "click",
-    () => {
+if (clearNotificationButton) {
 
-        notificationTitleInput.value = "";
+    clearNotificationButton.addEventListener(
+        "click",
+        () => {
 
-        notificationMessageInput.value = "";
-
-        document.getElementById(
-            "notification-type"
-        ).selectedIndex = 0;
+            if (notificationTitleInput) {
+                notificationTitleInput.value = "";
+            }
 
 
-        document.getElementById(
-            "notification-date"
-        ).value = "";
+            if (notificationMessageInput) {
+                notificationMessageInput.value = "";
+            }
 
 
-        document.getElementById(
-            "notification-time"
-        ).value = "";
+            const notificationType =
+                document.getElementById(
+                    "notification-type"
+                );
 
 
-        updateNotificationPreview();
+            if (notificationType) {
+                notificationType.selectedIndex = 0;
+            }
 
 
-        showToast(
-            "Form Cleared",
-            "Notification fields have been cleared."
-        );
+            const notificationDate =
+                document.getElementById(
+                    "notification-date"
+                );
 
-    }
-);
 
+            if (notificationDate) {
+                notificationDate.value = "";
+            }
+
+
+            const notificationTime =
+                document.getElementById(
+                    "notification-time"
+                );
+
+
+            if (notificationTime) {
+                notificationTime.value = "";
+            }
+
+
+            updateNotificationPreview();
+
+
+            showToast(
+                "Form Cleared",
+                "Notification fields have been cleared."
+            );
+
+        }
+    );
+
+}
+
+
+/* ---------------------------------------------------------
+   PUBLISH NOTIFICATION
+--------------------------------------------------------- */
 
 const publishNotificationButton =
     document.getElementById(
@@ -357,90 +929,81 @@ const publishNotificationButton =
     );
 
 
-publishNotificationButton.addEventListener(
-    "click",
-    () => {
+if (publishNotificationButton) {
 
-        const title =
-            notificationTitleInput.value.trim();
+    publishNotificationButton.addEventListener(
+        "click",
+        () => {
+
+            const title =
+                notificationTitleInput
+                    ? notificationTitleInput.value.trim()
+                    : "";
 
 
-        const message =
-            notificationMessageInput.value.trim();
+            const message =
+                notificationMessageInput
+                    ? notificationMessageInput.value.trim()
+                    : "";
 
 
-        if (!title) {
+            if (!title) {
+
+                showToast(
+                    "Missing Title",
+                    "Please enter a notification title."
+                );
+
+
+                if (notificationTitleInput) {
+
+                    notificationTitleInput.focus();
+
+                }
+
+
+                return;
+            }
+
+
+            if (!message) {
+
+                showToast(
+                    "Missing Message",
+                    "Please enter a notification message."
+                );
+
+
+                if (notificationMessageInput) {
+
+                    notificationMessageInput.focus();
+
+                }
+
+
+                return;
+            }
+
+
+            /*
+             * Firebase Firestore notification creation
+             * will be connected here next.
+             */
+
 
             showToast(
-                "Missing Title",
-                "Please enter a notification title."
+                "Ready to Publish",
+                "Notification form is valid. Firebase publishing will be connected next."
             );
 
-            notificationTitleInput.focus();
-
-            return;
         }
-
-
-        if (!message) {
-
-            showToast(
-                "Missing Message",
-                "Please enter a notification message."
-            );
-
-            notificationMessageInput.focus();
-
-            return;
-        }
-
-
-        /*
-         * Firebase Firestore integration will be
-         * added here in the next stage.
-         */
-
-        showToast(
-            "Ready to Publish",
-            "Notification form is valid. Firebase publishing will be connected next."
-        );
-
-    }
-);
-
-async function testFirebaseConnection() {
-
-    try {
-
-        const snapshot = await getDocs(
-            collection(db, "notifications")
-        );
-
-        console.log(
-            "✅ Firebase connected successfully."
-        );
-
-        console.log(
-            "Notifications found:",
-            snapshot.size
-        );
-
-    } catch (error) {
-
-        console.error(
-            "❌ Firebase connection failed:",
-            error
-        );
-
-    }
+    );
 
 }
 
 
-testFirebaseConnection();
-
 /* =========================================================
-   DEFAULT STATE
+   INITIAL STATE
 ========================================================= */
 
 openPage("home");
