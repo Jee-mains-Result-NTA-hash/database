@@ -21,6 +21,7 @@ import {
 
 const ADMIN_EMAIL = "admin@matrixedu.in";
 
+
 const authScreen =
     document.getElementById("auth-screen");
 
@@ -44,16 +45,23 @@ const loginError =
 
 
 /*
- * Keep the actual admin dashboard hidden until
- * Firebase confirms that a valid admin is signed in.
+ * IMPORTANT:
+ * Keep the login screen visible by default.
+ * Do not hide the main application until Firebase
+ * has confirmed that an admin is authenticated.
  */
+
+if (authScreen) {
+    authScreen.classList.remove("hidden");
+}
+
 if (appShell) {
     appShell.style.display = "none";
 }
 
 
 /* ---------------------------------------------------------
-   LOGIN ERROR
+   HELPERS
 --------------------------------------------------------- */
 
 function showLoginError(message) {
@@ -78,11 +86,9 @@ function hideLoginError() {
 }
 
 
-/* ---------------------------------------------------------
-   SHOW / HIDE APP
---------------------------------------------------------- */
-
 function showAdminApp() {
+
+    console.log("Showing admin dashboard");
 
     if (authScreen) {
         authScreen.classList.add("hidden");
@@ -96,6 +102,8 @@ function showAdminApp() {
 
 function showLoginScreen() {
 
+    console.log("Showing admin login");
+
     if (authScreen) {
         authScreen.classList.remove("hidden");
     }
@@ -106,9 +114,9 @@ function showLoginScreen() {
 }
 
 
-/* ---------------------------------------------------------
-   LOGIN
---------------------------------------------------------- */
+/* =========================================================
+   LOGIN FORM
+========================================================= */
 
 if (loginForm) {
 
@@ -144,9 +152,11 @@ if (loginForm) {
 
             try {
 
-                /*
-                 * Firebase Authentication
-                 */
+                console.log(
+                    "Attempting Firebase login..."
+                );
+
+
                 const credential =
                     await signInWithEmailAndPassword(
                         auth,
@@ -159,14 +169,26 @@ if (loginForm) {
                     credential.user;
 
 
+                console.log(
+                    "Firebase login successful:",
+                    user.email
+                );
+
+
                 /*
-                 * Admin email check
+                 * Admin email verification
                  */
+
                 if (
                     !user.email ||
                     user.email.toLowerCase() !==
                     ADMIN_EMAIL.toLowerCase()
                 ) {
+
+                    console.warn(
+                        "Authenticated user is not the admin account."
+                    );
+
 
                     await signOut(auth);
 
@@ -178,19 +200,15 @@ if (loginForm) {
                 }
 
 
-                console.log(
-                    "✅ Admin authenticated:",
-                    user.email
-                );
-
-
                 showAdminApp();
 
 
                 /*
-                 * Test Firestore after successful authentication.
+                 * Test Firestore access only after
+                 * authentication succeeds.
                  */
-                await testFirebaseConnection();
+
+                testFirebaseConnection();
 
             } catch (error) {
 
@@ -204,48 +222,53 @@ if (loginForm) {
                     "Unable to sign in. Please check your credentials.";
 
 
-                switch (error.code) {
+                if (
+                    error.code ===
+                    "auth/invalid-credential"
+                ) {
 
-                    case "auth/invalid-credential":
-                        message =
-                            "Incorrect email or password.";
-                        break;
+                    message =
+                        "Incorrect email or password.";
 
+                } else if (
+                    error.code ===
+                    "auth/invalid-email"
+                ) {
 
-                    case "auth/invalid-email":
-                        message =
-                            "Please enter a valid email address.";
-                        break;
+                    message =
+                        "Please enter a valid email address.";
 
+                } else if (
+                    error.code ===
+                    "auth/user-not-found"
+                ) {
 
-                    case "auth/user-not-found":
-                        message =
-                            "No account exists with this email.";
-                        break;
+                    message =
+                        "No account exists with this email.";
 
+                } else if (
+                    error.code ===
+                    "auth/wrong-password"
+                ) {
 
-                    case "auth/wrong-password":
-                        message =
-                            "Incorrect password.";
-                        break;
+                    message =
+                        "Incorrect password.";
 
+                } else if (
+                    error.code ===
+                    "auth/network-request-failed"
+                ) {
 
-                    case "auth/too-many-requests":
-                        message =
-                            "Too many login attempts. Please try again later.";
-                        break;
+                    message =
+                        "Network error. Check your internet connection.";
 
+                } else if (
+                    error.code ===
+                    "auth/too-many-requests"
+                ) {
 
-                    case "auth/network-request-failed":
-                        message =
-                            "Network error. Please check your internet connection.";
-                        break;
-
-
-                    case "auth/user-disabled":
-                        message =
-                            "This account has been disabled.";
-                        break;
+                    message =
+                        "Too many attempts. Please try again later.";
 
                 }
 
@@ -265,13 +288,24 @@ if (loginForm) {
 }
 
 
-/* ---------------------------------------------------------
+/* =========================================================
    AUTH STATE
---------------------------------------------------------- */
+========================================================= */
 
 onAuthStateChanged(
     auth,
     async (user) => {
+
+        console.log(
+            "Firebase auth state:",
+            user ? user.email : "No user"
+        );
+
+
+        /*
+         * Nobody is signed in.
+         * Keep the login screen visible.
+         */
 
         if (!user) {
 
@@ -282,14 +316,20 @@ onAuthStateChanged(
 
 
         /*
-         * Only the designated admin email is allowed
-         * to remain signed in to this dashboard.
+         * A Firebase account exists.
+         * Verify that it is the Admin account.
          */
+
         if (
             !user.email ||
             user.email.toLowerCase() !==
             ADMIN_EMAIL.toLowerCase()
         ) {
+
+            console.warn(
+                "A non-admin account is signed in."
+            );
+
 
             try {
 
@@ -298,7 +338,7 @@ onAuthStateChanged(
             } catch (error) {
 
                 console.error(
-                    "Failed to sign out unauthorized user:",
+                    "Error signing out unauthorized account:",
                     error
                 );
 
@@ -315,8 +355,12 @@ onAuthStateChanged(
         }
 
 
+        /*
+         * Valid Admin account.
+         */
+
         console.log(
-            "✅ Existing admin session:",
+            "Admin session verified:",
             user.email
         );
 
@@ -325,18 +369,19 @@ onAuthStateChanged(
 
 
         /*
-         * Verify Firestore access now that authentication
-         * has been confirmed.
+         * Firestore test.
+         * Failure here must NOT blank the page.
          */
-        await testFirebaseConnection();
+
+        testFirebaseConnection();
 
     }
 );
 
 
-/* ---------------------------------------------------------
+/* =========================================================
    FIRESTORE CONNECTION TEST
---------------------------------------------------------- */
+========================================================= */
 
 async function testFirebaseConnection() {
 
@@ -352,61 +397,22 @@ async function testFirebaseConnection() {
 
 
         console.log(
-            "✅ Firestore connected successfully."
+            "Firebase connected successfully."
         );
-
 
         console.log(
             "Notifications found:",
             snapshot.size
         );
 
-
     } catch (error) {
 
         console.error(
-            "❌ Firestore connection failed:",
+            "Firestore connection failed:",
             error
         );
 
     }
-
-}
-
-
-/* ---------------------------------------------------------
-   LOGOUT
---------------------------------------------------------- */
-
-const logoutButton =
-    document.querySelector(".logout-button");
-
-
-if (logoutButton) {
-
-    logoutButton.addEventListener(
-        "click",
-        async () => {
-
-            try {
-
-                await signOut(auth);
-
-                console.log(
-                    "✅ Admin signed out."
-                );
-
-            } catch (error) {
-
-                console.error(
-                    "Logout failed:",
-                    error
-                );
-
-            }
-
-        }
-    );
 
 }
 
