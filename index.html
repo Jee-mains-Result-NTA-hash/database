@@ -16,134 +16,147 @@
 
 <body>
 
+    <!-- =====================================================
+         ADMIN LOGIN
+    ====================================================== -->
+
+    <section class="auth-screen" id="auth-screen">
+
+        <div class="auth-background-circle circle-one"></div>
+        <div class="auth-background-circle circle-two"></div>
+
+        <div class="login-card">
+
+            <div class="login-brand">
+
+                <div class="login-logo">
+                    M
+                </div>
+
+                <div>
+                    <div class="login-brand-title">
+                        MATRIX
+                    </div>
+
+                    <div class="login-brand-subtitle">
+                        ADMIN PANEL
+                    </div>
+                </div>
+
+            </div>
+
+
+            <div class="login-heading">
+
+                <span class="eyebrow">
+                    SECURE ACCESS
+                </span>
+
+                <h1>
+                    Welcome back
+                </h1>
+
+                <p>
+                    Sign in to access the Matrix administration panel.
+                </p>
+
+            </div>
+
+
+            <form id="login-form">
+
+                <div class="login-field">
+
+                    <label for="login-email">
+                        Email Address
+                    </label>
+
+                    <input
+                        id="login-email"
+                        type="email"
+                        placeholder="Enter admin email"
+                        autocomplete="email"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="login-field">
+
+                    <label for="login-password">
+                        Password
+                    </label>
+
+                    <input
+                        id="login-password"
+                        type="password"
+                        placeholder="Enter password"
+                        autocomplete="current-password"
+                        required
+                    >
+
+                </div>
+
+
+                <div
+                    class="login-error"
+                    id="login-error"
+                >
+                    Invalid email or password.
+                </div>
+
+
+                <button
+                    type="submit"
+                    class="login-button"
+                    id="login-button"
+                >
+                    Sign In
+                </button>
+
+            </form>
+
+
+            <div class="login-footer">
+                Matrix Administration System
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         ADMIN APPLICATION
+    ====================================================== -->
+
     <div class="app-shell">
 
-
-        <!-- =====================================================
-     ADMIN LOGIN
-====================================================== -->
-
-<section class="auth-screen" id="auth-screen">
-
-    <div class="auth-background-circle circle-one"></div>
-    <div class="auth-background-circle circle-two"></div>
-
-    <div class="login-card">
-
-        <div class="login-brand">
-
-            <div class="login-logo">
-                M
-            </div>
-
-            <div>
-                <div class="login-brand-title">
-                    MATRIX
-                </div>
-
-                <div class="login-brand-subtitle">
-                    ADMIN PANEL
-                </div>
-            </div>
-
-        </div>
-
-
-        <div class="login-heading">
-
-            <span class="eyebrow">
-                SECURE ACCESS
-            </span>
-
-            <h1>
-                Welcome back
-            </h1>
-
-            <p>
-                Sign in to access the Matrix administration panel.
-            </p>
-
-        </div>
-
-
-        <form id="login-form">
-
-            <div class="login-field">
-
-                <label for="login-email">
-                    Email Address
-                </label>
-
-                <input
-                    id="login-email"
-                    type="email"
-                    placeholder="Enter admin email"
-                    autocomplete="email"
-                    required
-                >
-
-            </div>
-
-
-            <div class="login-field">
-
-                <label for="login-password">
-                    Password
-                </label>
-
-                <input
-                    id="login-password"
-                    type="password"
-                    placeholder="Enter password"
-                    autocomplete="current-password"
-                    required
-                >
-
-            </div>
-
-
-            <div
-                class="login-error"
-                id="login-error"
-            >
-                Invalid email or password.
-            </div>
-
-
-            <button
-                type="submit"
-                class="login-button"
-                id="login-button"
-            >
-                Sign In
-            </button>
-
-        </form>
-
-
-        <div class="login-footer">
-            Matrix Administration System
-        </div>
-
-    </div>
-
-</section>
-
-        <!-- =====================================================
+        <!-- =================================================
              SIDEBAR
-        ====================================================== -->
+        ================================================== -->
 
         <aside class="sidebar">
 
             <div class="brand">
+
                 <div class="brand-logo">
                     M
                 </div>
 
                 <div class="brand-text">
-                    <div class="brand-title">MATRIX</div>
-                    <div class="brand-subtitle">ADMIN PANEL</div>
+
+                    <div class="brand-title">
+                        MATRIX
+                    </div>
+
+                    <div class="brand-subtitle">
+                        ADMIN PANEL
+                    </div>
+
                 </div>
+
             </div>
 
 
@@ -153,12 +166,20 @@
                     MAIN
                 </div>
 
+
                 <button
                     class="nav-item active"
                     data-page="home"
                 >
-                    <span class="nav-icon">⌂</span>
-                    <span>Dashboard</span>
+
+                    <span class="nav-icon">
+                        ⌂
+                    </span>
+
+                    <span>
+                        Dashboard
+                    </span>
+
                 </button>
 
 
@@ -166,20 +187,36 @@
                     MANAGEMENT
                 </div>
 
+
                 <button
                     class="nav-item"
                     data-page="result"
                 >
-                    <span class="nav-icon">◫</span>
-                    <span>Add Result</span>
+
+                    <span class="nav-icon">
+                        ◫
+                    </span>
+
+                    <span>
+                        Add Result
+                    </span>
+
                 </button>
+
 
                 <button
                     class="nav-item"
                     data-page="notification"
                 >
-                    <span class="nav-icon">♢</span>
-                    <span>Add Notification</span>
+
+                    <span class="nav-icon">
+                        ♢
+                    </span>
+
+                    <span>
+                        Add Notification
+                    </span>
+
                 </button>
 
             </nav>
@@ -194,13 +231,22 @@
                     </div>
 
                     <div class="admin-info">
-                        <strong>Administrator</strong>
-                        <span>Matrix Admin</span>
+
+                        <strong>
+                            Administrator
+                        </strong>
+
+                        <span>
+                            Matrix Admin
+                        </span>
+
                     </div>
+
 
                     <button
                         class="logout-button"
                         title="Logout"
+                        type="button"
                     >
                         ↪
                     </button>
@@ -212,31 +258,39 @@
         </aside>
 
 
-        <!-- =====================================================
+        <!-- =================================================
              MAIN AREA
-        ====================================================== -->
+        ================================================== -->
 
         <main class="main-area">
 
-            <!-- HEADER -->
+            <!-- TOP BAR -->
 
             <header class="topbar">
 
                 <div>
-                    <h1 id="page-title">Dashboard</h1>
+
+                    <h1 id="page-title">
+                        Dashboard
+                    </h1>
 
                     <p id="page-subtitle">
                         Matrix administration and control center
                     </p>
+
                 </div>
 
 
                 <div class="topbar-right">
 
                     <div class="status-pill">
+
                         <span class="status-dot"></span>
+
                         Firebase Connected
+
                     </div>
+
 
                     <div class="topbar-avatar">
                         A
@@ -248,7 +302,7 @@
 
 
             <!-- =================================================
-                 HOME PAGE
+                 HOME / DASHBOARD
             ================================================== -->
 
             <section
@@ -276,6 +330,7 @@
 
                     </div>
 
+
                     <div class="welcome-decoration">
                         M
                     </div>
@@ -283,22 +338,28 @@
                 </div>
 
 
-                <!-- STAT CARDS -->
+                <!-- OVERVIEW -->
 
                 <div class="section-heading">
 
                     <div>
-                        <h3>Overview</h3>
+
+                        <h3>
+                            Overview
+                        </h3>
 
                         <p>
                             Current Matrix system statistics
                         </p>
+
                     </div>
 
                 </div>
 
 
                 <div class="stats-grid">
+
+                    <!-- STUDENTS -->
 
                     <div class="stat-card">
 
@@ -325,6 +386,8 @@
                     </div>
 
 
+                    <!-- TESTS -->
+
                     <div class="stat-card">
 
                         <div class="stat-icon tests-icon">
@@ -350,6 +413,8 @@
                     </div>
 
 
+                    <!-- NOTIFICATIONS -->
+
                     <div class="stat-card">
 
                         <div class="stat-icon notification-icon">
@@ -374,6 +439,8 @@
 
                     </div>
 
+
+                    <!-- RESULTS -->
 
                     <div class="stat-card">
 
@@ -407,11 +474,15 @@
                 <div class="section-heading">
 
                     <div>
-                        <h3>Quick Actions</h3>
+
+                        <h3>
+                            Quick Actions
+                        </h3>
 
                         <p>
                             Frequently used administrator tools
                         </p>
+
                     </div>
 
                 </div>
@@ -422,6 +493,7 @@
                     <button
                         class="quick-action"
                         data-page="result"
+                        type="button"
                     >
 
                         <div class="quick-action-icon">
@@ -450,6 +522,7 @@
                     <button
                         class="quick-action"
                         data-page="notification"
+                        type="button"
                     >
 
                         <div class="quick-action-icon notification-action">
@@ -482,11 +555,15 @@
                 <div class="section-heading recent-heading">
 
                     <div>
-                        <h3>Recent Activity</h3>
+
+                        <h3>
+                            Recent Activity
+                        </h3>
 
                         <p>
                             Latest changes in the system
                         </p>
+
                     </div>
 
                 </div>
@@ -585,11 +662,15 @@
                     <div class="form-card-header">
 
                         <div>
-                            <h3>Test Information</h3>
+
+                            <h3>
+                                Test Information
+                            </h3>
 
                             <p>
                                 Basic information about the test
                             </p>
+
                         </div>
 
                         <span class="form-step">
@@ -690,18 +771,22 @@
                 </div>
 
 
-                <!-- FIXED INFORMATION -->
+                <!-- TEST SETTINGS -->
 
                 <div class="form-card">
 
                     <div class="form-card-header">
 
                         <div>
-                            <h3>Test Settings</h3>
+
+                            <h3>
+                                Test Settings
+                            </h3>
 
                             <p>
                                 These values are fixed for the current Matrix setup
                             </p>
+
                         </div>
 
                         <span class="form-step">
@@ -780,11 +865,15 @@
                     <div class="form-card-header">
 
                         <div>
-                            <h3>Overall Result</h3>
+
+                            <h3>
+                                Overall Result
+                            </h3>
 
                             <p>
                                 Enter the main performance statistics
                             </p>
+
                         </div>
 
                         <span class="form-step">
@@ -898,11 +987,15 @@
                     <div class="form-card-header">
 
                         <div>
-                            <h3>Subject Results</h3>
+
+                            <h3>
+                                Subject Results
+                            </h3>
 
                             <p>
                                 Enter subject-wise performance data
                             </p>
+
                         </div>
 
                         <span class="form-step">
@@ -917,8 +1010,11 @@
                     <div class="subject-section">
 
                         <div class="subject-title">
+
                             <span class="subject-marker maths-marker"></span>
+
                             Mathematics
+
                         </div>
 
 
@@ -993,8 +1089,11 @@
                     <div class="subject-section">
 
                         <div class="subject-title">
+
                             <span class="subject-marker physics-marker"></span>
+
                             Physics
+
                         </div>
 
 
@@ -1069,8 +1168,11 @@
                     <div class="subject-section">
 
                         <div class="subject-title">
+
                             <span class="subject-marker chemistry-marker"></span>
+
                             Chemistry
+
                         </div>
 
 
@@ -1140,7 +1242,7 @@
                     </div>
 
 
-                    <!-- SAVE -->
+                    <!-- ACTIONS -->
 
                     <div class="form-actions">
 
@@ -1151,6 +1253,7 @@
                         >
                             Clear
                         </button>
+
 
                         <button
                             type="button"
@@ -1199,11 +1302,15 @@
                     <div class="form-card-header">
 
                         <div>
-                            <h3>Notification Information</h3>
+
+                            <h3>
+                                Notification Information
+                            </h3>
 
                             <p>
                                 Create and publish a new notification
                             </p>
+
                         </div>
 
                         <span class="form-step">
@@ -1312,17 +1419,21 @@
                     </div>
 
 
+                    <!-- PREVIEW -->
+
                     <div class="notification-preview">
 
                         <div class="preview-label">
                             PREVIEW
                         </div>
 
+
                         <div class="notification-preview-card">
 
                             <div class="preview-icon">
                                 !
                             </div>
+
 
                             <div>
 
@@ -1341,6 +1452,8 @@
                     </div>
 
 
+                    <!-- ACTIONS -->
+
                     <div class="form-actions">
 
                         <button
@@ -1350,6 +1463,7 @@
                         >
                             Clear
                         </button>
+
 
                         <button
                             type="button"
@@ -1370,17 +1484,22 @@
     </div>
 
 
-    <!-- =========================================================
+    <!-- =====================================================
          TOAST
-    ========================================================== -->
+    ====================================================== -->
 
     <div
         class="toast"
         id="toast"
     >
-        <div class="toast-icon">✓</div>
+
+        <div class="toast-icon">
+            ✓
+        </div>
+
 
         <div>
+
             <strong id="toast-title">
                 Success
             </strong>
@@ -1388,7 +1507,9 @@
             <span id="toast-message">
                 Operation completed successfully.
             </span>
+
         </div>
+
     </div>
 
 
